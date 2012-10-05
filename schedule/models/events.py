@@ -242,9 +242,9 @@ class EventRelationManager(models.Manager):
     #     )
     
     
-    def get_objects_for_avent(self, event, model, distinction=None):
+    def get_objects_for_event(self, event, model, distinction=None):
         '''
-            Alternative version for original get_objects_for_event() method.
+            My own version of get_objects_for_event() method.
             Returns a queryset full of instances of model, if it has an EventRelation
             with event, and distinction
             >>> event = Event.objects.get(pk='1')
@@ -258,8 +258,9 @@ class EventRelationManager(models.Manager):
         else:
             dist_q = Q()
         ct = ContentType.objects.get_for_model(model)
-        return event.eventrelation_set.filter(dist_q, content_type = ct)
-    
+        el = event.eventrelation_set.filter(dist_q, content_type = ct)
+        ol = [e.content_object for e in el]
+        return ol
 
     def get_events_for_object(self, content_object, distinction=None, inherit=True):
         '''
