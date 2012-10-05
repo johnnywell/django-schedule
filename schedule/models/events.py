@@ -240,6 +240,26 @@ class EventRelationManager(models.Manager):
     #         eventrelation__content_type = ct,
     #         eventrelation__event = event
     #     )
+    
+    
+    def get_objects_for_avent(self, event, model, distinction=None):
+        '''
+            Alternative version for original get_objects_for_event() method.
+            Returns a queryset full of instances of model, if it has an EventRelation
+            with event, and distinction
+            >>> event = Event.objects.get(pk='1')
+            >>> EventRelation.objects.get_objects_for_avent(event, Block, distinction='1')
+            [<EventRelation: teste(1)-Principal>]
+            >>> EventRelation.objects.get_objects_for_avent(event, Block)
+            [<EventRelation: teste(1)-Principal>, <EventRelation: teste(2)-Secundario>]
+        '''
+        if distinction:
+            dist_q = Q(distinction = distinction)
+        else:
+            dist_q = Q()
+        ct = ContentType.objects.get_for_model(model)
+        return event.eventrelation_set.filter(dist_q, content_type = ct)
+    
 
     def get_events_for_object(self, content_object, distinction=None, inherit=True):
         '''
