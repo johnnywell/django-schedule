@@ -244,7 +244,6 @@ class EventRelationManager(models.Manager):
     
     def get_objects_for_event(self, event, model, distinction=None):
         '''
-            My own version of get_objects_for_event() method.
             Returns a queryset full of instances of model, if it has an EventRelation
             with event, and distinction
             >>> event = Event.objects.get(pk='1')
